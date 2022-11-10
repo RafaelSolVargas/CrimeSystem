@@ -8,6 +8,9 @@ public static class WebApplicationBuilderExtensions {
         if (startup == null)
             throw new ArgumentException("Startup class is invalid.");
 
+        // Configure the port listened to be 5000
+        builder.WebHost.UseUrls("http://*:5000");
+
         startup.ConfigureServices(builder.Services);
         var app = builder.Build();
 
