@@ -8,8 +8,8 @@ namespace CrimeSystem.Services;
 
 public class VehicleService : IVehicleService {
     private string createVehicleSQL = "";
-    private string getVehicleByIdSQL = "";
-    private string getAllVehicleSQL = "";
+    private string getVehicleByIdSQL = "SELECT * FROM vehicle AS v WHERE v.id = @VehicleID";
+    private string getAllVehicleSQL = "SELECT * FROM vehicle";
     private IConfiguration config;
     public VehicleService(IConfiguration config) {
         this.config = config;

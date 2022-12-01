@@ -8,7 +8,7 @@ namespace CrimeSystem.Services;
 
 public class CrimeTypeService : ICrimeTypeService {
     private string createCrimeTypeSQL = "";
-    private string getCrimeTypeByIdSQL = "";
+    private string getCrimeTypeByIdSQL = "SELECT * FROM  AS v WHERE v.id = @VehicleID";
     private string getAllCrimeTypeSQL = "";
     private IConfiguration config;
     public CrimeTypeService(IConfiguration config) {

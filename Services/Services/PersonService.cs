@@ -8,8 +8,8 @@ namespace CrimeSystem.Services;
 
 public class PersonService : IPersonService {
     private string createPersonSQL = "";
-    private string getPersonByIdSQL = "";
-    private string getAllPersonSQL = "";
+    private string getPersonByIdSQL = "SELECT * FROM person AS p WHERE p.id = @PersonID";
+    private string getAllPersonSQL = "SELECT * FROM person";
     private IConfiguration config;
     public PersonService(IConfiguration config) {
         this.config = config;

@@ -1,10 +1,12 @@
 namespace CrimeSystem.Models;
 public class CrimeType {
-    public DateTime data { get; set; }
+    public string? name { get; set; }
     public int id { get; set; }
 
-    public CrimeType(int id, DateTime data) {
-        this.data = data;
+    public CrimeType() { }
+
+    public CrimeType(int id, string name) {
+        this.name = name;
         this.id = id;
     }
 }

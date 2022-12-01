@@ -1,94 +1,74 @@
-CREATE TABLE IF NOT EXISTS  Individuo
-(
- nome_mae VARCHAR(200),  
- nome_pai VARCHAR(200),  
- rg VARCHAR(200),  
- id_individuo INT PRIMARY KEY,  
- data_nascimento DATE,  
- cpf VARCHAR(200),  
- nome VARCHAR(200),  
- foto VARCHAR(200),  
- altura FLOAT  
+CREATE TABLE IF NOT EXISTS  Person (
+ id SERIAL PRIMARY KEY,  
+ motherName VARCHAR(200) NOT NULL,  
+ fatherName VARCHAR(200) NOT NULL,  
+ name VARCHAR(200) NOT NULL,  
+ rg VARCHAR(200) NOT NULL, 
+ dateBirth DATE NOT NULL,  
+ cpf VARCHAR(200) NOT NULL,  
+ altura FLOAT NOT NULL  
 );
 
-CREATE TABLE IF NOT EXISTS Caracateristica
-(
- id_caracteristica INT PRIMARY KEY,  
- descricao VARCHAR(200)  
+CREATE TABLE IF NOT EXISTS Characteristic (
+ id SERIAL PRIMARY KEY,  
+ description VARCHAR(200) NOT NULL  
 );
 
-CREATE TABLE IF NOT EXISTS  Tipo_Crime
-(
- nome VARCHAR(200),  
- id_tipo_crime INT PRIMARY KEY  
+CREATE TABLE IF NOT EXISTS  CrimeType (
+ id SERIAL PRIMARY KEY,
+ name VARCHAR(200) NOT NULL  
 );
 
 
-CREATE TABLE Crime
-(
- id_crime INT PRIMARY KEY,  
- data DATE,  
- id_tipo_crime INT NOT NULL,
- CONSTRAINT CrimeFK FOREIGN KEY (id_tipo_crime) REFERENCES Tipo_Crime(id_tipo_crime)
+CREATE TABLE IF NOT EXISTS Crime (
+ id SERIAL PRIMARY KEY,  
+ data DATE NOT NULL,  
+ crimeTypeID INT NOT NULL REFERENCES CrimeType (id)
 );
 
-CREATE TABLE Veiculo
-(
- id_veiculo INT PRIMARY KEY,  
- tipo VARCHAR(200),  
- placa VARCHAR(200),  
- modelo VARCHAR(200)  
+CREATE TABLE IF NOT EXISTS Vehicle (
+ id SERIAL PRIMARY KEY,  
+ type VARCHAR(200) NOT NULL,  
+ plateNumber VARCHAR(200) NOT NULL,  
+ model VARCHAR(200) NOT NULL  
 );
 
-CREATE TABLE Arma
-(
- id_arma INT PRIMARY KEY,  
- tipo VARCHAR(200),  
- registro VARCHAR(200),  
- descricao VARCHAR(200)  
+CREATE TABLE IF NOT EXISTS Weapon (
+ id SERIAL PRIMARY KEY,  
+ type VARCHAR(200) NOT NULL,  
+ register VARCHAR(200) NOT NULL,  
+ description VARCHAR(200) NOT NULL  
 );
 
-CREATE TABLE Crime_Foto
-(
- id_foto INT PRIMARY KEY,  
- foto VARCHAR(200),  
- descricao VARCHAR(200),  
- id_crime INT NOT NULL,
- CONSTRAINT crimeFotoFK FOREIGN KEY (id_crime) REFERENCES Crime (id_crime)
+CREATE TABLE IF NOT EXISTS CrimePhoto (
+ id SERIAL PRIMARY KEY,  
+ photo BYTEA NOT NULL,  
+ description VARCHAR(200) NOT NULL  
 );
 
-CREATE TABLE Ind_Carac
-(
- id_caracteristica INT NOT NULL,  
- id_individuo INT NOT NULL,
- CONSTRAINT indCaracPK PRIMARY KEY (id_individuo, id_caracteristica),
- CONSTRAINT indCaracId1FK FOREIGN KEY (id_caracteristica) REFERENCES Caracateristica (id_caracteristica),
- CONSTRAINT indCaracId2FK FOREIGN KEY (id_individuo) REFERENCES Individuo (id_individuo)
+CREATE TABLE IF NOT EXISTS Characteristic (
+ id SERIAL NOT NULL,  
+ description VARCHAR(200) NOT NULL
 );
 
-CREATE TABLE Ind_Crime
-(
- id_crime INT NOT NULL,
- id_individuo INT NOT NULL,
- CONSTRAINT indCrimePK PRIMARY KEY (id_crime, id_individuo),
- CONSTRAINT indCrimeId1FK FOREIGN KEY (id_crime) REFERENCES Crime (id_crime),
- CONSTRAINT indCrimeId2FK FOREIGN KEY (id_individuo) REFERENCES Individuo (id_individuo)
+
+CREATE TABLE IF NOT EXISTS Person_Characteristic (
+ personID INT NOT NULL REFERENCES Person(id),  
+ characteristic INT NOT NULL REFERENCES Characteristic(id) 
 );
 
-CREATE TABLE Crime_Veiculo
-(
- id_veiculo INT NOT NULL,  
- id_crime INT NOT NULL,
- CONSTRAINT FKCrimeVeiculo1 FOREIGN KEY(id_veiculo) REFERENCES Veiculo(id_veiculo),
- CONSTRAINT FKCrimeVeiculo2 FOREIGN KEY(id_crime) REFERENCES Crime(id_crime),
- CONSTRAINT CrimeVeiculoPK PRIMARY KEY (id_veiculo, id_crime)
+
+CREATE TABLE IF NOT EXISTS Person_Crime (
+ personID INT NOT NULL REFERENCES Person(id),  
+ crimeID INT NOT NULL REFERENCES Crime(id) 
 );
 
-CREATE TABLE Crime_Arma
-(
- id_arma INT NOT NULL,  
- id_crime INT NOT NULL,
- CONSTRAINT FKCrimeArma1 FOREIGN KEY(id_arma) REFERENCES Arma(id_arma),
- CONSTRAINT FKCrimeArma2 FOREIGN KEY(id_crime) REFERENCES Crime(id_crime),
- CONSTRAINT CrimeArmaPK PRIMARY KEY (id_arma, id_crime)
+CREATE TABLE IF NOT EXISTS Crime_Vehicle (
+ vehicleID SERIAL NOT NULL REFERENCES Vehicle(id),  
+ crimeID SERIAL NOT NULL REFERENCES Crime(id)
+);
+
+CREATE TABLE IF NOT EXISTS Crime_Weapon (
+ weaponID SERIAL NOT NULL REFERENCES Weapon(id),  
+ crimeID SERIAL NOT NULL REFERENCES Crime(id)
 );

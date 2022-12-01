@@ -8,3 +8,4 @@ namespace CrimeSystem.Services.Interfaces {
         Task<List<CrimePhoto>> GetAll();
     }
 }
+

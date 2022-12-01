@@ -5,8 +5,6 @@ using CrimeSystem.Models;
 
 namespace CrimeSystem.Controllers;
 
-[ApiController]
-[Route("")]
 public class PersonController : ControllerBase {
     private IPersonService _PersonService;
 
@@ -32,5 +30,10 @@ public class PersonController : ControllerBase {
         var Person = await this._PersonService.GetPerson(PersonID);
 
         return StatusCode(StatusCodes.Status200OK, Person);
+    }
+
+    [HttpGet("/")]
+    public ActionResult Welcome() {
+        return StatusCode(StatusCodes.Status200OK, "Welcome");
     }
 }
