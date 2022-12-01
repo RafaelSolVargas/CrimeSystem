@@ -24,16 +24,14 @@ public class CrimeController : ControllerBase {
     [HttpGet("/crimes")]
     public async Task<ActionResult<GetAllCrimesResponse>> GetAll() {
         var crimes = await this.crimeService.GetAll();
-        var response = new GetAllCrimesResponse(crimes);
 
-        return StatusCode(StatusCodes.Status200OK, response);
+        return StatusCode(StatusCodes.Status200OK, crimes);
     }
 
     [HttpGet("/crime/{crimeID}")]
     public async Task<ActionResult<GetCrimeResponse>> GetCrime([FromRoute] int crimeID) {
         var crime = await this.crimeService.GetCrime(crimeID);
-        var response = new GetCrimeResponse(crime);
 
-        return StatusCode(StatusCodes.Status200OK, response);
+        return StatusCode(StatusCodes.Status200OK, crime);
     }
 }

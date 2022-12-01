@@ -1,26 +1,39 @@
 using CrimeSystem.DTOs;
 using CrimeSystem.Models;
-using CrimeSystem.Repositories.Interfaces;
 using CrimeSystem.Services.Interfaces;
+using Dapper;
+using Npgsql;
 
 namespace CrimeSystem.Services;
 
 public class CrimeService : ICrimeService {
-    private ICrimeRepository crimeRepository;
-
-    public CrimeService(ICrimeRepository crimeRepository) {
-        this.crimeRepository = crimeRepository;
+    private string createCrimeSQL = "";
+    private string getCrimeByIdSQL = "";
+    private string getAllCrimeSQL = "";
+    private IConfiguration config;
+    public CrimeService(IConfiguration config) {
+        this.config = config;
     }
 
-    public Task<Crime> CreateCrime(CrimeToCreate crimeToCreate) {
-        return this.crimeRepository.CreateCrime(crimeToCreate);
+    public async Task<Crime> CreateCrime(CrimeToCreate crimeToCreate) {
+        using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+
+        var crimeID = await dbConnection.ExecuteAsync(this.createCrimeSQL, crimeToCreate);
+
+        return await this.GetCrime(crimeID);
     }
 
-    public Task<List<Crime>> GetAll() {
-        return this.crimeRepository.GetAll();
+    public async Task<List<Crime>> GetAll() {
+        using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+
+        var crimes = await dbConnection.QueryAsync<Crime>(this.getAllCrimeSQL);
+        return crimes.ToList();
     }
 
-    public Task<Crime> GetCrime(int crimeID) {
-        return this.crimeRepository.GetCrime(crimeID);
+    public async Task<Crime> GetCrime(int crimeID) {
+        using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+
+        var crimes = await dbConnection.QueryAsync<Crime>(this.getCrimeByIdSQL, new { crimeID = crimeID });
+        return crimes.First();
     }
 }
