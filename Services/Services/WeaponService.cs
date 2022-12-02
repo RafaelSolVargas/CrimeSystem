@@ -21,9 +21,13 @@ public class WeaponService : IWeaponService {
     public async Task<Weapon> CreateWeapon(WeaponToCreate WeaponToCreate) {
         using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
 
-        var crimeID = await dbConnection.ExecuteAsync(this.createWeaponSQL, WeaponToCreate);
+        var weaponID = (await dbConnection.QueryAsync<int>(this.createWeaponSQL, new {
+            type = WeaponToCreate.type,
+            register = WeaponToCreate.register,
+            description = WeaponToCreate.description
+        })).First();
 
-        return await this.GetWeapon(crimeID);
+        return await this.GetWeapon(weaponID);
     }
 
     public async Task<List<Weapon>> GetAll() {

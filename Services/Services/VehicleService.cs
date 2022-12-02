@@ -21,9 +21,13 @@ public class VehicleService : IVehicleService {
     public async Task<Vehicle> CreateVehicle(VehicleToCreate VehicleToCreate) {
         using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
 
-        var crimeID = await dbConnection.ExecuteAsync(this.createVehicleSQL, VehicleToCreate);
+        var vehicleID = (await dbConnection.QueryAsync<int>(this.createVehicleSQL, new {
+            type = VehicleToCreate.type,
+            plateNumber = VehicleToCreate.plateNumber,
+            model = VehicleToCreate.model
+        })).First();
 
-        return await this.GetVehicle(crimeID);
+        return await this.GetVehicle(vehicleID);
     }
 
     public async Task<List<Vehicle>> GetAll() {

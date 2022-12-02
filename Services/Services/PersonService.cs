@@ -20,10 +20,19 @@ public class PersonService : IPersonService {
 
     public async Task<Person> CreatePerson(PersonToCreate personToCreate) {
         using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+        Console.WriteLine("Add Person");
 
-        var crimeID = await dbConnection.ExecuteAsync(this.createPersonSQL, personToCreate);
+        var personID = (await dbConnection.QueryAsync<int>(this.createPersonSQL, new {
+            motherName = personToCreate.motherName,
+            fatherName = personToCreate.fatherName,
+            name = personToCreate.name,
+            rg = personToCreate.rg,
+            dateBirth = personToCreate.dateBirth,
+            cpf = personToCreate.cpf,
+            height = personToCreate.height
+        })).First();
 
-        return await this.GetPerson(crimeID);
+        return await this.GetPerson(personID);
     }
     public async Task<bool> Delete(int id) {
         using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);

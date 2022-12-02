@@ -45,9 +45,9 @@ public class CrimeService : ICrimeService {
 
     private string createCrimeSQL = "INSERT INTO Crime (date, crimeTypeID) VALUES (@date, @crimeTypeID) RETURNING id";
 
-    private string addPersonToCrime = "INSERT INTO Person_Crimes (personID, crimeID) VALUES (@personID, @crimeID)";
+    private string addPersonToCrime = "INSERT INTO Person_Crime (personID, crimeID) VALUES (@personID, @crimeID)";
     private string addWeaponToCrime = "INSERT INTO Crime_Weapon (weaponID, crimeID) VALUES (@weaponID, @crimeID)";
-    private string addVehicleToCrime = "INSERT INTO Person_Crimes (vehicleID, crimeID) VALUES (@vehicleID, @crimeID)";
+    private string addVehicleToCrime = "INSERT INTO Crime_Vehicle (vehicleID, crimeID) VALUES (@vehicleID, @crimeID)";
 
     private string getAllVehiclesCrime = @"SELECT * FROM Crime AS c
                                         JOIN Crime_Vehicle AS cv
@@ -86,27 +86,25 @@ public class CrimeService : ICrimeService {
         dbConnection.Open();
 
         using (var transaction = dbConnection.BeginTransaction()) {
-            var crimeID = await dbConnection.ExecuteAsync(this.createCrimeSQL, new { date = crimeToCreate.date, crimeTypeID = crimeToCreate.crimeTypeID });
+            var crimeID = (await dbConnection.QueryAsync<int>(this.createCrimeSQL, new { date = crimeToCreate.date, crimeTypeID = crimeToCreate.crimeTypeID })).First();
+            Console.WriteLine(crimeID);
             // Persons
             foreach (var person in crimeToCreate.persons) {
-                if (person.alreadyExists)
-                    await dbConnection.ExecuteAsync(this.addPersonToCrime, new { crimeID = crimeID, personID = person.id });
-                else
-                    await this.personService.CreatePerson(person);
+                if (!person.alreadyExists)
+                    person.id = (await this.personService.CreatePerson(person)).id;
+                await dbConnection.ExecuteAsync(this.addPersonToCrime, new { crimeID = crimeID, personID = person.id });
             }
             // Vehicle
             foreach (var vehicle in crimeToCreate.vehicles) {
-                if (vehicle.alreadyExists)
-                    await dbConnection.ExecuteAsync(this.addVehicleToCrime, new { crimeID = crimeID, vehicleID = vehicle.id });
-                else
-                    await this.vehicleService.CreateVehicle(vehicle);
+                if (!vehicle.alreadyExists)
+                    vehicle.id = (await this.vehicleService.CreateVehicle(vehicle)).id;
+                await dbConnection.ExecuteAsync(this.addVehicleToCrime, new { crimeID = crimeID, vehicleID = vehicle.id });
             }
             // Weapon
             foreach (var weapon in crimeToCreate.weapons) {
-                if (weapon.alreadyExists)
-                    await dbConnection.ExecuteAsync(this.addWeaponToCrime, new { crimeID = crimeID, weaponID = weapon.id });
-                else
-                    await this.weaponService.CreateWeapon(weapon);
+                if (!weapon.alreadyExists)
+                    weapon.id = (await this.weaponService.CreateWeapon(weapon)).id;
+                await dbConnection.ExecuteAsync(this.addWeaponToCrime, new { crimeID = crimeID, weaponID = weapon.id });
             }
 
             transaction.Commit();
@@ -140,6 +138,7 @@ public class CrimeService : ICrimeService {
         using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
         var crimes = await dbConnection.QueryAsync<Crime>(this.getCrimeByIdSQL, new { crimeID = crimeID });
         var crime = crimes.First();
+        Console.WriteLine(crime.id);
 
         crime.crimeType = (await dbConnection.QueryAsync<CrimeType>("SELECT * FROM CrimeType AS ct WHERE ct.id = @crimeTypeID", new { crimeTypeID = crime.crimeTypeID })).First();
 
