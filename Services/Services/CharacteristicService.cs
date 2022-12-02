@@ -7,9 +7,10 @@ using Npgsql;
 namespace CrimeSystem.Services;
 
 public class CharacteristicService : ICharacteristicService {
-    private string createCharacteristicSQL = "";
-    private string getCharacteristicByIdSQL = "";
-    private string getAllCharacteristicSQL = "";
+    private string createCharacteristicSQL = "INSERT INTO characteristic (description) VALUES (@description) RETURNING id";
+    private string getCharacteristicByIdSQL = "SELECT * FROM characteristic AS c WHERE c.id = @CharacteristicID";
+    private string getAllCharacteristicSQL = "SELECT * FROM characteristic";
+    private string deleteByIdSQL = "DELETE FROM characteristic WHERE id = @id";
     private IConfiguration config;
     public CharacteristicService(IConfiguration config) {
         this.config = config;
@@ -22,6 +23,15 @@ public class CharacteristicService : ICharacteristicService {
         var crimeID = await dbConnection.ExecuteAsync(this.createCharacteristicSQL, CharacteristicToCreate);
 
         return await this.GetCharacteristic(crimeID);
+    }
+
+    public async Task<bool> Delete(int id) {
+        using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+
+        var deleted = await dbConnection.ExecuteAsync(this.deleteByIdSQL, new { id = id });
+        if (deleted > 0)
+            return true;
+        return false;
     }
 
     public async Task<List<Characteristic>> GetAll() {

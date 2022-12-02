@@ -6,6 +6,7 @@ namespace CrimeSystem.Services.Interfaces {
         Task<CrimePhoto> CreateCrimePhoto(CrimePhotoToCreate crimePhotoToCreate);
         Task<CrimePhoto> GetCrimePhoto(int crimePhotoID);
         Task<List<CrimePhoto>> GetAll();
+        Task<bool> Delete(int id);
     }
 }
 

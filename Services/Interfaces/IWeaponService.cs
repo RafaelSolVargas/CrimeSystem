@@ -6,5 +6,6 @@ namespace CrimeSystem.Services.Interfaces {
         Task<Weapon> CreateWeapon(WeaponToCreate WeaponToCreate);
         Task<Weapon> GetWeapon(int WeaponID);
         Task<List<Weapon>> GetAll();
+        Task<bool> Delete(int id);
     }
 }

@@ -7,9 +7,11 @@ using Npgsql;
 namespace CrimeSystem.Services;
 
 public class PersonService : IPersonService {
-    private string createPersonSQL = "";
+    private string createPersonSQL = "INSERT INTO person (motherName, fatherName, name, rg, dateBirth, cpf, height) VALUES (@motherName, @fatherName, @name, @rg, @dateBirth, @cpf, @height) RETURNING id";
     private string getPersonByIdSQL = "SELECT * FROM person AS p WHERE p.id = @PersonID";
     private string getAllPersonSQL = "SELECT * FROM person";
+    private string deleteByIdSQL = "DELETE FROM person WHERE id = @id";
+
     private IConfiguration config;
     public PersonService(IConfiguration config) {
         this.config = config;
@@ -22,6 +24,14 @@ public class PersonService : IPersonService {
         var crimeID = await dbConnection.ExecuteAsync(this.createPersonSQL, personToCreate);
 
         return await this.GetPerson(crimeID);
+    }
+    public async Task<bool> Delete(int id) {
+        using var dbConnection = new NpgsqlConnection(this.config["dbConnString"]);
+
+        var deleted = await dbConnection.ExecuteAsync(this.deleteByIdSQL, new { id = id });
+        if (deleted > 0)
+            return true;
+        return false;
     }
 
     public async Task<List<Person>> GetAll() {

@@ -6,5 +6,6 @@ namespace CrimeSystem.Services.Interfaces {
         Task<CrimeType> CreateCrimeType(CrimeTypeToCreate crimeTypeToCreate);
         Task<CrimeType> GetCrimeType(int crimeTypeID);
         Task<List<CrimeType>> GetAll();
+        Task<bool> Delete(int id);
     }
 }

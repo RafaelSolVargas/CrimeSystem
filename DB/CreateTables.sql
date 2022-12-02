@@ -1,3 +1,10 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO public;
+
+
 CREATE TABLE IF NOT EXISTS  Person (
  id SERIAL PRIMARY KEY,  
  motherName VARCHAR(200) NOT NULL,  
@@ -6,7 +13,7 @@ CREATE TABLE IF NOT EXISTS  Person (
  rg VARCHAR(200) NOT NULL, 
  dateBirth DATE NOT NULL,  
  cpf VARCHAR(200) NOT NULL,  
- altura FLOAT NOT NULL  
+ height FLOAT NOT NULL  
 );
 
 CREATE TABLE IF NOT EXISTS Characteristic (
@@ -22,7 +29,7 @@ CREATE TABLE IF NOT EXISTS  CrimeType (
 
 CREATE TABLE IF NOT EXISTS Crime (
  id SERIAL PRIMARY KEY,  
- data DATE NOT NULL,  
+ date DATE NOT NULL,  
  crimeTypeID INT NOT NULL REFERENCES CrimeType (id)
 );
 
@@ -42,13 +49,8 @@ CREATE TABLE IF NOT EXISTS Weapon (
 
 CREATE TABLE IF NOT EXISTS CrimePhoto (
  id SERIAL PRIMARY KEY,  
- photo BYTEA NOT NULL,  
+ photo BYTEA,  
  description VARCHAR(200) NOT NULL  
-);
-
-CREATE TABLE IF NOT EXISTS Characteristic (
- id SERIAL NOT NULL,  
- description VARCHAR(200) NOT NULL
 );
 
 

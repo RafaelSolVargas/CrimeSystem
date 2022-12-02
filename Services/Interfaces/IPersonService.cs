@@ -6,5 +6,7 @@ namespace CrimeSystem.Services.Interfaces {
         Task<Person> CreatePerson(PersonToCreate personToCreate);
         Task<Person> GetPerson(int personID);
         Task<List<Person>> GetAll();
+        Task<bool> Delete(int id);
+
     }
 }

@@ -6,5 +6,6 @@ namespace CrimeSystem.Services.Interfaces {
         Task<Vehicle> CreateVehicle(VehicleToCreate vehicleToCreate);
         Task<Vehicle> GetVehicle(int vehicleID);
         Task<List<Vehicle>> GetAll();
+        Task<bool> Delete(int id);
     }
 }
