@@ -33,10 +33,23 @@ BEGIN
     INSERT INTO person (motherName, fatherName, name, rg, dateBirth, cpf, height) VALUES ('mother', 'father', 'João Luiz', 'RG', '2000-01-01', 'CPF', 1.67);
     INSERT INTO person (motherName, fatherName, name, rg, dateBirth, cpf, height) VALUES ('mother', 'father', 'João Rodrigo', 'RG', '2000-01-01', 'CPF', 1.75);
     INSERT INTO person (motherName, fatherName, name, rg, dateBirth, cpf, height) VALUES ('mother', 'father', 'João Pedro', 'RG', '2000-01-01', 'CPF', 1.86); -- ID 10
+ 
 
     INSERT INTO vehicle (type, plateNumber, model) VALUES ('Moto', 'MMM7777', 'Bis'); -- ID 1
     INSERT INTO vehicle (type, plateNumber, model) VALUES ('Carro', 'MMM7778', 'Corsa');
     INSERT INTO vehicle (type, plateNumber, model) VALUES ('Carro', 'MMM7779', 'Chevette'); -- ID 3
+
+    INSERT INTO weapon (type, register, description) VALUES ('Faca', 'MMM7777', 'Uma arma'); -- ID 1
+    INSERT INTO weapon (type, register, description) VALUES ('Bomba', 'MMM7777', 'Uma arma'); -- ID 2
+    INSERT INTO weapon (type, register, description) VALUES ('AK47', 'MMM7777', 'Uma arma'); -- ID 3
+
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (1, 1);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (1, 2);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (2, 2);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (2, 3);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (3, 1);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (4, 3);
+    INSERT INTO Crime_Weapon (crimeID, weaponID) VALUES (4, 1);
 
     INSERT INTO Person_Crime (personID, crimeID) VALUES (1, 1);
     INSERT INTO Person_Crime (personID, crimeID) VALUES (2, 1);

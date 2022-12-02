@@ -6,8 +6,8 @@ public class Person {
     public string? motherName { get; set; }
     public string? cpf { get; set; }
     public string? rg { get; set; }
-    public DateTime? birthDate { get; set; }
-    public int height { get; set; }
+    public DateTime? dateBirth { get; set; }
+    public float height { get; set; }
     public byte[]? photo { get; set; }
 
     public Person() { }
@@ -19,7 +19,7 @@ public class Person {
         this.motherName = motherName;
         this.cpf = cpf;
         this.rg = rg;
-        this.birthDate = birthDate;
+        this.dateBirth = birthDate;
         this.height = height;
         this.photo = photo;
     }

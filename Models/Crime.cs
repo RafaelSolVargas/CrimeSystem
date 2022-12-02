@@ -5,6 +5,7 @@ public class Crime {
     public List<Vehicle> vehicles { get; set; }
     public CrimePhoto? crimePhoto { get; set; }
     public CrimeType? crimeType { get; set; }
+    public int crimeTypeID { get; set; }
     public DateTime date { get; set; }
     public int id { get; set; }
 
